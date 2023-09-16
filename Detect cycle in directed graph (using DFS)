@@ -25,3 +25,41 @@
         }
         return false;
     }
+
+
+
+//solution 2: using topological sort (using BFS )
+    bool isCyclic(int v, vector<int> adj[]) {
+        // code here
+        //using topological sort
+        // --> login: if graph is cyclic then topological sort doen't give the correct output
+        vector<int> indegree(v,0);
+	    for(int i=0;i<v;i++) {
+	        for(auto &x:adj[i]) {
+	            indegree[x]++;
+	        }
+	    }
+	    
+	    //step 2: create a queue and insert those vertex whose indegree is 0
+	    queue<int> q;
+	    for(int i=0;i<v;i++) {
+	        if(indegree[i]==0) q.push(i);
+	    }
+	    
+	   
+	    //step 3: for every adjacent v of u 
+	       // 1: reduce indegree of v by 1
+	       // 2: if indegree of v become 0 add v to the queue
+	    while(q.empty()==false) {
+	        for(auto &x:adj[q.front()]) {
+	            indegree[x]--;
+	            if(indegree[x]==0) q.push(x);
+	        }
+	        q.pop();
+	    }
+        
+        for(auto x:indegree) {
+            if(x!=0) return true;
+        }
+        return false;
+    }
