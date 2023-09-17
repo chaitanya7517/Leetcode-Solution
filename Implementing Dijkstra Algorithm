@@ -1,0 +1,30 @@
+
+	//Function to find the shortest distance of all the vertice from the source vertex S.
+
+  //method 1:without using priority_queue 
+    vector <int> dijkstra(int v, vector<vector<int>> adj[], int s)
+    {
+        // Code here
+        vector<bool> inset(v,false);
+        vector<int> key(v,INT_MAX);
+        key[s]=0;
+        
+        for(int cnt=0;cnt<v;cnt++) {
+            int u=-1;
+            for(int i=0;i<v;i++ ) {
+                if(inset[i]==false and (u==-1 || key[i]<key[u])) {
+                    u=i;
+                }
+            }
+            inset[u] =true;
+            
+            //update the values in key vector
+            for(auto x:adj[u]) {
+                int v=x[0];
+                int w=x[1];
+                key[v]=min(key[v], key[u]+w);
+            }
+        }
+        return key;
+    }
+
