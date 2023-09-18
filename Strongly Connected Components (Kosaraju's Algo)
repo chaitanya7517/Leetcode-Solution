@@ -1,0 +1,66 @@
+void dfs1(vector<vector<int>>&adj,stack<int>&st,int s,vector<int>&visited) {
+	   visited[s]=1;
+	   for(auto x:adj[s]){
+	       if(visited[x]==0) dfs1(adj,st,x,visited);
+	   }
+	   st.push(s);
+	}
+	
+	void dfs2(vector<vector<int>>&adj,int s,vector<int>&visited,vector<int>&t) {
+	    visited[s]=1;
+	    t.push_back(s);
+	    for(auto x:adj[s]) {
+	        if(visited[x]==0) {
+	            dfs2(adj,x,visited,t);
+	        }
+	    }
+	}
+	
+    int kosaraju(int V, vector<vector<int>>& adj)
+    {
+        //code here
+        // we have give an adjacency list
+        
+        //step 1 : sort all the edges according to its finishing time
+        // i.e last finished vertex comes at top of the stack
+        
+        stack<int> st;
+        vector<int> visited(V,0);
+        for(int i=0;i<V;i++) {
+            if(visited[i]==0) dfs1(adj,st,i,visited);
+        }
+        
+        //step 2: reverse the graph
+        vector<vector<int>> adj2(V);
+        int i=0;
+        for(auto x:adj) {
+            for(auto it:x) {
+                adj2[it].push_back(i);
+            }
+            i++;
+        }
+        
+        //step 3: dfs of graph
+        int cnt=0;
+        for(int i=0;i<V;i++) visited[i]=0;
+        vector<vector<int>> ans;
+        while(!st.empty()) {
+            int node=st.top();
+            st.pop();
+            if(visited[node]==0) {
+                vector<int> t;
+                dfs2(adj2,node,visited,t);
+                ans.push_back(t);
+                cnt++;
+            }
+        }
+        
+        //printing the connected component
+        // for(auto x:ans) {
+        //     for(auto it:x) {
+        //         cout<<it<<" ";
+        //     }cout<<endl;
+        // }
+        
+        return cnt;
+    }
