@@ -1,4 +1,5 @@
-vector<int> topoSort(int v, vector<int> adj[]) 
+//method 1: using bfs
+	vector<int> topoSort(int v, vector<int> adj[]) 
 	{
 	    // code here
 	    
@@ -27,6 +28,38 @@ vector<int> topoSort(int v, vector<int> adj[])
 	            if(indegree[x]==0) q.push(x);
 	        }
 	        q.pop();
+	    }
+	    return ans;
+	}
+
+
+//method 2: using dfs
+
+	void dfs(int i,vector<int>adj[],vector<int>&visited,stack<int>&st) {
+	    visited[i]=1;
+	    for(auto node:adj[i]) {
+	        if(visited[node]==0) {
+	            dfs(node,adj,visited,st);
+	        }
+	    }
+	    st.push(i);
+	}
+	
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    
+	    //topological sort using dfs
+	    stack<int> st;
+	    vector<int> visited(V,0);
+	    for(int i=0;i<V;i++) {
+	        if(visited[i]==0) {
+	            dfs(i,adj,visited,st);
+	        }
+	    }
+	    vector<int> ans;
+	    while(!st.empty()) {
+	        ans.push_back(st.top());
+	        st.pop();
 	    }
 	    return ans;
 	}
